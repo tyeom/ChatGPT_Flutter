@@ -14,8 +14,7 @@ To make the app work, you need to set the [OpenAI API key](https://beta.openai.c
 
 ***
 
-![image](https://user-images.githubusercontent.com/13028129/224253877-afa335c0-035a-49bb-b8d4-7656820ca2df.png)<br/>
-![Flutter_ChatGPT](https://user-images.githubusercontent.com/13028129/224254784-9002daa5-267f-4dae-a606-2c2a521532ea.gif)
+![image](https://user-images.githubusercontent.com/13028129/224253877-afa335c0-035a-49bb-b8d4-7656820ca2df.png)
 
 ***
 
