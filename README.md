@@ -1,16 +1,48 @@
-# chat_gpt
+> ### This project is a clone of A GitHub project into a Flutter version.<br/>
+> [ChatGPT_Avalonia - wieslawsoltes](https://github.com/wieslawsoltes/ChatGPT)
 
-A new Flutter project.
+# ChatGPT
 
-## Getting Started
+A ChatGPT Flutter client for graphical user interface.
 
-This project is a starting point for a Flutter application.
+To make the app work, you need to set the [OpenAI API key](https://beta.openai.com/account/api-keys) as the `OPENAI_API_KEY` environment variable.
 
-A few resources to get you started if this is your first Flutter project:
+***
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![image](https://user-images.githubusercontent.com/13028129/224253877-afa335c0-035a-49bb-b8d4-7656820ca2df.png)<br/>
+![Flutter_ChatGPT](https://user-images.githubusercontent.com/13028129/224254784-9002daa5-267f-4dae-a606-2c2a521532ea.gif)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+***
+
+✅ Features
+-
+
+- [x] ChatGPT Chat
+- [x] Modify and resend chat messages
+- [x] Remove chat message
+- [x] Copying a chat messages
+
+☑️ future work
+-
+
+- [ ] ChatGPT Chat
+- [ ] Multiple language highlighting support
+- [ ] Management by conversation topic
+- [ ] Backup and import conversations
+
+
+# Shortcuts
+
+### Main Window
+
+- not yet.
+
+### Message Prompt
+
+- Enter : Send prompt.
+- Alt+Enter : Insert new line.
+
+# Docs
+
+- [Guide Chat completions](https://platform.openai.com/docs/guides/chat)
+- [API Reference](https://platform.openai.com/docs/api-reference/chat)
