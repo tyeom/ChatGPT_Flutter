@@ -5,6 +5,11 @@
 
 A ChatGPT Flutter client for graphical user interface.
 
+***
+
+**ChatGPT Client - Flutter for MacOS, Windows, Linux, Android, iOS and Browse**
+
+***
 To make the app work, you need to set the [OpenAI API key](https://beta.openai.com/account/api-keys) as the `OPENAI_API_KEY` environment variable.
 
 ***
