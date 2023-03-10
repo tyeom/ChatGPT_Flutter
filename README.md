@@ -1,4 +1,4 @@
-> ### This project is a clone of A GitHub project into a Flutter version.<br/>
+> ### This project is a clone of ChatGPT_Avalonia GitHub project into a Flutter version.<br/>
 > [ChatGPT_Avalonia - wieslawsoltes](https://github.com/wieslawsoltes/ChatGPT)
 
 # ChatGPT
