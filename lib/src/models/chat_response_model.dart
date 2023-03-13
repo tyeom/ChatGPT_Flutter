@@ -18,10 +18,10 @@ class ChatResponseErrorModel extends ChatResponseModel {
 
   factory ChatResponseErrorModel.fromJson(Map<String, dynamic> json) =>
       ChatResponseErrorModel(
-        json['message'] as String,
-        json['type'] as String,
-        json['param'] as Object,
-        json['code'] as String,
+        json['message'] as String?,
+        json['type'] as String?,
+        json['param'] as Object?,
+        json['code'] as String?,
       );
 
   Map<String, dynamic> toJson() => {

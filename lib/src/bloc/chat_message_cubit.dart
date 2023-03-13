@@ -135,17 +135,21 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
       emit(ChatMessageChangeState(promptMessage));
 
       // 응답 오류 발생시
-      if (responseData is ChatResponseErrorModel) {
+      if (responseData == null) {
+        resultMessage.isError = true;
+        resultMessage.message = 'Requires apiKey setting.';
+      }
+      else if (responseData is ChatResponseErrorModel) {
         var error = responseData;
 
         resultMessage.isError = true;
         // ChatGPT에서 오류 메세지 반환
         if (error.message != null) {
-          resultMessage.message = error.message!;
+          resultMessage.message = '${error.message!} - ${error.code}';
         }
         // ChatGPT에서 오류 메세지 반환 없음
         else {
-          resultMessage.message = '알 수 없는 Error 발생, 다시 시도해보세요!';
+          resultMessage.message = 'An unknown error occurred, try again!';
         }
       }
       // 정상 응답

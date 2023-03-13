@@ -45,7 +45,7 @@ class ChatGptService {
     return json.encode(requestMap);
   }
 
-  Future<ChatResponseModel?> sendApiRequestAsync(
+  Future<ChatResponseModel> sendApiRequestAsync(
       String apiUrl, String apiKey, String requestBodyJson) async {
     var dio = Dio(BaseOptions(
       responseType: ResponseType.json,
@@ -53,9 +53,13 @@ class ChatGptService {
     ));
     dio.options.headers["Authorization"] = "Bearer $apiKey";
     Response<Map<String, dynamic>> resposne =
-        await dio.post(apiUrl, data: requestBodyJson);
-    if (resposne.statusCode != 200) {
-      return null;
+        await dio.post(apiUrl, data: requestBodyJson, options: Options(
+          followRedirects: false,
+          // Status code 501 미만 까지만 유효성 검증 이후 코드는 throw 된다.
+          validateStatus: (status) => status! < 501,
+        ));
+    if (resposne.statusCode == 200) {
+      return ChatResponseSuccessModel.fromJson(resposne.data!);
     }
 
     switch (resposne.statusCode) {
@@ -64,7 +68,6 @@ class ChatGptService {
       case 500:
         return ChatResponseErrorModel.fromJson(resposne.data!);
     }
-
-    return ChatResponseSuccessModel.fromJson(resposne.data!);
+    return ChatResponseErrorModel('statusCode : ${resposne.statusCode}', 'An unknown error occurred', null, null);
   }
 }
