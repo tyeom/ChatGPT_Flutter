@@ -27,6 +27,7 @@ To make the app work, you need to set the [OpenAI API key](https://beta.openai.c
 - [x] Modify and resend chat messages
 - [x] Remove chat message
 - [x] Copying a chat messages
+- [x] Write messages by voice
 
 ☑️ future work
 -
