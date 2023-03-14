@@ -13,9 +13,11 @@ A ChatGPT Flutter client for graphical user interface.
 To make the app work, you need to set the [OpenAI API key](https://beta.openai.com/account/api-keys) as the `OPENAI_API_KEY` environment variable.
 
 ***
+**[Windows desktop]**<br/>
+![image](https://user-images.githubusercontent.com/13028129/224253877-afa335c0-035a-49bb-b8d4-7656820ca2df.png)<br/>
 
-![image](https://user-images.githubusercontent.com/13028129/224253877-afa335c0-035a-49bb-b8d4-7656820ca2df.png)
-
+**[Android]**<br/>
+![KakaoTalk_20230313_150525943_02](https://user-images.githubusercontent.com/13028129/224629697-45b64534-7286-4f55-bb66-7ba790544051.png)
 ***
 
 ✅ Features
@@ -25,6 +27,7 @@ To make the app work, you need to set the [OpenAI API key](https://beta.openai.c
 - [x] Modify and resend chat messages
 - [x] Remove chat message
 - [x] Copying a chat messages
+- [x] Write messages by voice **(iOS, MacOS, Android only)**
 
 ☑️ future work
 -
