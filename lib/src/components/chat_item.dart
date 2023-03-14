@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:flutter_speech/flutter_speech.dart';
 
 class ChatItem extends StatefulWidget {
   ChatMessageViewModel chatMessageViewModel;
@@ -23,13 +22,6 @@ class _ChatItemState extends State<ChatItem> {
   final TextEditingController _sendTextEditingController =
       TextEditingController();
 
-  // 음성 인식 관련
-  //final String speechRecognition_locale = 'en_US';
-  final String speechRecognition_locale = 'ko_KR';
-  late SpeechRecognition _speech;
-  bool _speechRecognitionAvailable = false;
-  bool _isListening = false;
-
   @override
   void initState() {
     super.initState();
@@ -37,55 +29,10 @@ class _ChatItemState extends State<ChatItem> {
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.android ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.macOS) {
-      _activateSpeechRecognizer();
+      context
+          .read<ChatMessageCubit>()
+          .activateSpeechRecognizer(widget.chatMessageViewModel);
     }
-  }
-
-  void _activateSpeechRecognizer() {
-    //print('_MyAppState.activateSpeechRecognizer... ');
-    _speech = SpeechRecognition();
-    _speech.setAvailabilityHandler(_onSpeechAvailability);
-    _speech.setRecognitionStartedHandler(_onRecognitionStarted);
-    _speech.setRecognitionResultHandler(_onRecognitionResult);
-    _speech.setRecognitionCompleteHandler(_onRecognitionComplete);
-    _speech.setErrorHandler(_errorHandler);
-    _speech.activate(speechRecognition_locale).then((res) {
-      setState(() {
-        _speechRecognitionAvailable = res;
-      });
-    });
-  }
-
-  /// 음성 인식 유효성 검증
-  void _onSpeechAvailability(bool result) =>
-      setState(() => _speechRecognitionAvailable = result);
-
-  /// 음성 인식 시작
-  void _onRecognitionStarted() {
-    setState(() => _isListening = true);
-  }
-
-  /// 음성 인식 결과
-  void _onRecognitionResult(String text) {
-    setState(() {
-      _sendTextEditingController.text = text;
-    });
-    //print('_MyAppState.onRecognitionResult... $text');
-  }
-
-  /// 음성 인식 완료
-  void _onRecognitionComplete(String text) {
-    setState(() => _isListening = false);
-    //print('_MyAppState.onRecognitionComplete... $text');
-  }
-
-  /// 음성 인식 오류 발생
-  void _errorHandler() {
-    setState(() {
-      _isListening = false;
-    });
-
-    _activateSpeechRecognizer();
   }
 
   /// Alt + Enter : 줄바꿈 처리, Enter : Send Key Event 처리
@@ -218,22 +165,21 @@ class _ChatItemState extends State<ChatItem> {
       duration: Duration(milliseconds: 2000),
     ));
 
-    _speech.activate(speechRecognition_locale).then((_) {
-      return _speech.listen().then((result) {
-        //print('SpeechRecognition start => result : $result');
-        setState(() {
-          _isListening = result;
-        });
-      });
-    });
+    context
+        .read<ChatMessageCubit>()
+        .speechRecognizerStart(widget.chatMessageViewModel);
   }
 
-  /// 음성 인식 버튼 위짓
-  List<Widget> _displaySpeechRecognitionWidget() {
+  /// 음성 인식 버튼 위젯
+  List<Widget> _displaySpeechRecognitionWidget(
+      ChatMessageViewModel chatMessage) {
     // Android, iOS, macOS 플랫폼만 지원
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.android ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.macOS) {
+      if (chatMessage.transcription.isNotEmpty) {
+        _sendTextEditingController.text = chatMessage.transcription;
+      }
       return [
         const SizedBox(
           width: 15,
@@ -250,11 +196,12 @@ class _ChatItemState extends State<ChatItem> {
             ),
             child: IconButton(
               onPressed: () {
-                if (_speechRecognitionAvailable && !_isListening) {
+                if (chatMessage.speechRecognitionAvailable &&
+                    !chatMessage.isListening) {
                   _start();
                 }
               },
-              icon: _isListening
+              icon: chatMessage.isListening
                   ? const Icon(Icons.voice_chat)
                   : const Icon(Icons.mic),
               tooltip: 'Voice recognition',
@@ -324,7 +271,7 @@ class _ChatItemState extends State<ChatItem> {
             tooltip: 'Send',
             hoverColor: Colors.transparent,
           )),
-      ..._displaySpeechRecognitionWidget(),
+      ..._displaySpeechRecognitionWidget(chatMessage),
     ]);
   }
 

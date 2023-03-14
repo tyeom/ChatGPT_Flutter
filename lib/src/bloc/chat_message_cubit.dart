@@ -6,16 +6,101 @@ import 'package:chat_gpt/src/repository/settings_repository.dart';
 import 'package:chat_gpt/src/services/chat_gpt_service.dart';
 import 'package:chat_gpt/src/viewmodels/chat_message_viewmodel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_speech/flutter_speech.dart';
 
 class ChatMessageCubit extends Cubit<ChatMessageState> {
   final ChatGptService chatGptService;
   final SettingsRepository settingsRepository;
   final List<ChatMessageViewModel> _chatMessageList = [];
 
+  // 음성 인식 관련
+  //final String speechRecognition_locale = 'en_US';
+  final String speechRecognition_locale = 'ko_KR';
+  late SpeechRecognition _speech;
+  late ChatMessageViewModel? _speechRecognitionchatTargetMessage;
+
   ChatMessageCubit({
     required this.chatGptService,
     required this.settingsRepository,
   }) : super(ChatListMessageState([]));
+
+  void activateSpeechRecognizer(ChatMessageViewModel chatMessage) {
+    _speechRecognitionchatTargetMessage = chatMessage;
+
+    //print('_MyAppState.activateSpeechRecognizer... ');
+    _speech = SpeechRecognition();
+    _speech.setAvailabilityHandler(_onSpeechAvailability);
+    _speech.setRecognitionStartedHandler(_onRecognitionStarted);
+    _speech.setRecognitionResultHandler(_onRecognitionResult);
+    _speech.setRecognitionCompleteHandler(_onRecognitionComplete);
+    _speech.setErrorHandler(_errorHandler);
+    _speech.activate(speechRecognition_locale).then((res) {
+      if (_speechRecognitionchatTargetMessage != null) {
+        _speechRecognitionchatTargetMessage!.transcription = '';
+        _speechRecognitionchatTargetMessage!.speechRecognitionError = false;
+        _speechRecognitionchatTargetMessage!.speechRecognitionAvailable = res;
+        emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+      }
+    });
+  }
+
+  /// 음성 인식 유효성 검증
+  void _onSpeechAvailability(bool result) {
+    if (_speechRecognitionchatTargetMessage != null) {
+      _speechRecognitionchatTargetMessage!.speechRecognitionAvailable = result;
+      emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+    }
+  }
+
+  /// 음성 인식 시작
+  void _onRecognitionStarted() {
+    if (_speechRecognitionchatTargetMessage != null) {
+      _speechRecognitionchatTargetMessage!.isListening = true;
+      emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+    }
+  }
+
+  /// 음성 인식 결과
+  void _onRecognitionResult(String text) {
+    if (_speechRecognitionchatTargetMessage != null) {
+      _speechRecognitionchatTargetMessage!.transcription = text;
+      emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+    }
+  }
+
+  /// 음성 인식 완료
+  void _onRecognitionComplete(String text) {
+    if (_speechRecognitionchatTargetMessage != null) {
+      _speechRecognitionchatTargetMessage!.transcription = text;
+      _speechRecognitionchatTargetMessage!.isListening = false;
+      _speechRecognitionchatTargetMessage!.speechRecognitionError = false;
+      emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+    }
+  }
+
+  /// 음성 인식 오류 발생
+  void _errorHandler() {
+    if (_speechRecognitionchatTargetMessage != null) {
+      _speechRecognitionchatTargetMessage!.transcription = '';
+      _speechRecognitionchatTargetMessage!.isListening = false;
+      _speechRecognitionchatTargetMessage!.speechRecognitionError = true;
+
+      activateSpeechRecognizer(_speechRecognitionchatTargetMessage!);
+    }
+  }
+
+  /// 음성 인식 시작
+  void speechRecognizerStart(ChatMessageViewModel chatMessage) {
+    _speechRecognitionchatTargetMessage = chatMessage;
+
+    _speech.activate(speechRecognition_locale).then((_) {
+      return _speech.listen().then((result) {
+        _speechRecognitionchatTargetMessage!.isListening = result;
+        activateSpeechRecognizer(_speechRecognitionchatTargetMessage!);
+        emit(ChatMessageChangeState(_speechRecognitionchatTargetMessage!));
+      });
+    });
+  }
 
   void getChatMessageData() {
     if (_chatMessageList.isEmpty) {
@@ -138,8 +223,7 @@ class ChatMessageCubit extends Cubit<ChatMessageState> {
       if (responseData == null) {
         resultMessage.isError = true;
         resultMessage.message = 'Requires apiKey setting.';
-      }
-      else if (responseData is ChatResponseErrorModel) {
+      } else if (responseData is ChatResponseErrorModel) {
         var error = responseData;
 
         resultMessage.isError = true;
