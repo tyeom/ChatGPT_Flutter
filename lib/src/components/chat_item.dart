@@ -29,7 +29,6 @@ class _ChatItemState extends State<ChatItem> {
   late SpeechRecognition _speech;
   bool _speechRecognitionAvailable = false;
   bool _isListening = false;
-  String _transcription = '';
 
   @override
   void initState() {
@@ -43,7 +42,7 @@ class _ChatItemState extends State<ChatItem> {
   }
 
   void _activateSpeechRecognizer() {
-    print('_MyAppState.activateSpeechRecognizer... ');
+    //print('_MyAppState.activateSpeechRecognizer... ');
     _speech = SpeechRecognition();
     _speech.setAvailabilityHandler(_onSpeechAvailability);
     _speech.setRecognitionStartedHandler(_onRecognitionStarted);
@@ -53,7 +52,6 @@ class _ChatItemState extends State<ChatItem> {
     _speech.activate(speechRecognition_locale).then((res) {
       setState(() {
         _speechRecognitionAvailable = res;
-        _isListening = false;
       });
     });
   }
@@ -69,21 +67,26 @@ class _ChatItemState extends State<ChatItem> {
 
   /// 음성 인식 결과
   void _onRecognitionResult(String text) {
-    print('_MyAppState.onRecognitionResult... $text');
     setState(() {
       _sendTextEditingController.text = text;
-      _transcription = text;
     });
+    //print('_MyAppState.onRecognitionResult... $text');
   }
 
   /// 음성 인식 완료
   void _onRecognitionComplete(String text) {
-    print('_MyAppState.onRecognitionComplete... $text');
     setState(() => _isListening = false);
+    //print('_MyAppState.onRecognitionComplete... $text');
   }
 
   /// 음성 인식 오류 발생
-  void _errorHandler() => _activateSpeechRecognizer();
+  void _errorHandler() {
+    setState(() {
+      _isListening = false;
+    });
+
+    _activateSpeechRecognizer();
+  }
 
   /// Alt + Enter : 줄바꿈 처리, Enter : Send Key Event 처리
   late final _focusNode = FocusNode(
@@ -217,7 +220,7 @@ class _ChatItemState extends State<ChatItem> {
 
     _speech.activate(speechRecognition_locale).then((_) {
       return _speech.listen().then((result) {
-        print('SpeechRecognition start => result : $result');
+        //print('SpeechRecognition start => result : $result');
         setState(() {
           _isListening = result;
         });
