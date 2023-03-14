@@ -107,7 +107,7 @@ class PopupItemSettings extends StatelessWidget {
                 onChanged: (value) => _updateSettings(context),
               ),
               const SizedBox(
-                height: 10,
+                height: 120,
               ),
             ],
           );

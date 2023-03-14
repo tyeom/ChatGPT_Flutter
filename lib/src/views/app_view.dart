@@ -70,7 +70,7 @@ class _AppViewState extends State<AppView> {
             tag: 'settings',
             child: Icon(Icons.settings),
             popUp: PopUpItem(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.fromLTRB(5, 20, 5, 30),
               color: ThemeData().backgroundColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),

@@ -34,6 +34,7 @@ class _ChatItemState extends State<ChatItem> {
   @override
   void initState() {
     super.initState();
+    // Android, iOS, macOS 플랫폼만 지원
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.android ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.macOS) {
@@ -50,7 +51,10 @@ class _ChatItemState extends State<ChatItem> {
     _speech.setRecognitionCompleteHandler(_onRecognitionComplete);
     _speech.setErrorHandler(_errorHandler);
     _speech.activate(speechRecognition_locale).then((res) {
-      setState(() => _speechRecognitionAvailable = res);
+      setState(() {
+        _speechRecognitionAvailable = res;
+        _isListening = false;
+      });
     });
   }
 
@@ -206,6 +210,11 @@ class _ChatItemState extends State<ChatItem> {
 
   /// 음성 인식 시작
   void _start() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Listening to your voice..."),
+      duration: Duration(milliseconds: 2000),
+    ));
+
     _speech.activate(speechRecognition_locale).then((_) {
       return _speech.listen().then((result) {
         print('SpeechRecognition start => result : $result');
@@ -218,6 +227,7 @@ class _ChatItemState extends State<ChatItem> {
 
   /// 음성 인식 버튼 위짓
   List<Widget> _displaySpeechRecognitionWidget() {
+    // Android, iOS, macOS 플랫폼만 지원
     if (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.android ||
         foundation.defaultTargetPlatform == foundation.TargetPlatform.macOS) {
@@ -241,7 +251,9 @@ class _ChatItemState extends State<ChatItem> {
                   _start();
                 }
               },
-              icon: const Icon(Icons.mic),
+              icon: _isListening
+                  ? const Icon(Icons.voice_chat)
+                  : const Icon(Icons.mic),
               tooltip: 'Voice recognition',
               hoverColor: Colors.transparent,
             )),
@@ -392,6 +404,13 @@ class _ChatItemState extends State<ChatItem> {
   }
 
   void _sendChatMessage() {
+    if (_sendTextEditingController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please enter your message."),
+        duration: Duration(milliseconds: 1000),
+      ));
+      return;
+    }
     if (widget.chatMessageViewModel.isEditing) {
       widget.chatMessageViewModel.message = '';
     }
