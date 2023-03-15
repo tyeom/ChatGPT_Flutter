@@ -271,6 +271,7 @@ class _ChatItemState extends State<ChatItem> {
             tooltip: 'Send',
             hoverColor: Colors.transparent,
           )),
+      // 음성 인식 버튼 추가
       ..._displaySpeechRecognitionWidget(chatMessage),
     ]);
   }
