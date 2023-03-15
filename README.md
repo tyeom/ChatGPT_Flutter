@@ -22,8 +22,8 @@ To make the app work, you need to set the [OpenAI API key](https://beta.openai.c
 
 ***
 > #### This project is covered as a blog article.<br/>
-> [Chat GPT Client 만들어보기 wirh flutter_bloc 패키지](https://blog.arong.info/flutter/2023/03/13/Flutter-Chat-GPT-Client-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0-wirh-flutter_bloc-%ED%8C%A8%ED%82%A4%EC%A7%80.html) or [Chat GPT Client 만들어보기 wirh flutter_bloc 패키지](https://arong.info/List/ContentsView/2399)<br/>
-> [Chat GPT Client 만들어보기 wirh 음성인식 추가](https://blog.arong.info/flutter/2023/03/14/Flutter-Chat-GPT-Client-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0-wirh-%EC%9D%8C%EC%84%B1%EC%9D%B8%EC%8B%9D-%EC%B6%94%EA%B0%80.html) or [Chat GPT Client 만들어보기 wirh 음성인식 추가](https://arong.info/List/ContentsView/2400)
+> [Chat GPT Client 만들어보기 wirh flutter_bloc 패키지](https://blog.arong.info/flutter/2023/03/13/Flutter-Chat-GPT-Client-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0-with-flutter_bloc-%ED%8C%A8%ED%82%A4%EC%A7%80.html) or [Chat GPT Client 만들어보기 wirh flutter_bloc 패키지](https://arong.info/List/ContentsView/2401)<br/>
+> [Chat GPT Client 만들어보기 wirh 음성인식 추가](https://blog.arong.info/flutter/2023/03/14/Flutter-Chat-GPT-Client-%EB%A7%8C%EB%93%A4%EC%96%B4%EB%B3%B4%EA%B8%B0-with-%EC%9D%8C%EC%84%B1%EC%9D%B8%EC%8B%9D-%EC%B6%94%EA%B0%80.html) or [Chat GPT Client 만들어보기 wirh 음성인식 추가](https://arong.info/List/ContentsView/2402)
 ***
 
 ✅ Features
